@@ -2,17 +2,38 @@ package service
 
 import (
 	"context"
-	"log"
 
+	"github.com/Colvin-Y/lunaticvibes-server/handler"
 	scorepb "github.com/Colvin-Y/lunaticvibes-server/proto/score"
 )
 
-func (s *Server) InsertScore(ctx context.Context, in *scorepb.InsertScoreRequest) (*scorepb.InsertScoreReply, error) {
-	log.Println("insert score")
-	err := in.ValidateAll()
+func precheck(ctx context.Context, handler *handler.InsertScoreHandler) error {
+	err := handler.Req.ValidateAll()
 	if err != nil {
-		log.Println(err)
-		return &scorepb.InsertScoreReply{Message: err.Error()}, nil
+		handler.Logger.Error(err.Error())
+		return err
 	}
-	return &scorepb.InsertScoreReply{Message: in.Data.String()}, nil
+
+	return nil
+}
+
+func (s *Server) InsertScore(ctx context.Context, in *scorepb.InsertScoreRequest) (*scorepb.InsertScoreReply, error) {
+	hd := &handler.InsertScoreHandler{
+		Logger: s.Logger,
+		Req:    in,
+		Resp:   &scorepb.InsertScoreReply{},
+	}
+
+	funcs := []handler.InsertScoreHandlerFunc{
+		precheck,
+	}
+
+	err := hd.Sync(ctx, funcs...)
+	var respMsg string
+	if err != nil {
+		respMsg = err.Error()
+	} else {
+		respMsg = in.Data.String()
+	}
+	return &scorepb.InsertScoreReply{Message: respMsg}, nil
 }
