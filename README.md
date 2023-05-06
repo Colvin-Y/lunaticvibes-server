@@ -1,1 +1,2 @@
 # lunaticvibes-server
+rpc server
