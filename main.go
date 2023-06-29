@@ -33,7 +33,7 @@ func main() {
 	svc := &service.Server{}
 	svc.Logger = logger
 	helloworldpb.RegisterGreeterServer(s, svc)
-	scorepb.RegisterInsertScoreServer(s, svc)
+	scorepb.RegisterScoreServer(s, svc)
 
 	// 8080端口启动gRPC Server
 	log.Println("Serving gRPC on 0.0.0.0:8080")

@@ -8,7 +8,7 @@ import (
 
 type Server struct {
 	helloworldpb.UnimplementedGreeterServer
-	scorepb.UnimplementedInsertScoreServer
+	scorepb.UnimplementedScoreServer
 	Logger *logger.Logger
 }
 
