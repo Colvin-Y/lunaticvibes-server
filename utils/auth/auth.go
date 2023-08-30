@@ -1,4 +1,13 @@
-// 权限校验相关模块，包括登录态校验以及密钥的发放及维护
+/*
+权限校验相关模块，包括登录态校验以及密钥的发放及维护
+使用方式:
+
+	Client															Server
+	login															GenRSAKeyByUser
+	token=common.RSAEncrypt(pubKey, current_timestamp_str)
+	do_action(data, userUUID, token)								IsUserLegal
+	logout															DeleteRSAKeyByUser
+*/
 package auth
 
 import (
